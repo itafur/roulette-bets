@@ -88,7 +88,6 @@ function open(req, res) {
 
 function bet(req, res) {
     const { userId } = req.headers['user-id']
-    console.log(userId)
     const { rouletteId, betType, betOption } = req.body
     const amountOfMoney = Number(req.body.amountOfMoney)
     RouletteModel.findById({ _id: mongoose.Types.ObjectId(rouletteId) }).then((roulette) => {
@@ -240,10 +239,10 @@ function close(req, res) {
             }
         }
         RouletteModel.updateOne({ _id: mongoose.Types.ObjectId(id) }, { $set: data }).then(() => {
-            BetModel.find({ rouletteId: id }).then((bets) => {
+            getBetsByRouletteId(id).then((bets) => {
                 res.send({
                     response: {
-                        message: '',
+                        message: 'La ruleta ha sido cerrada',
                         results: bets
                     }
                 })
@@ -275,8 +274,12 @@ function getAllOpenAndClosed(res) {
     })
 }
 
-function getBetsByRouletteId() {
-    
+function getBetsByRouletteId(rouletteId) {
+    return new Promise((resolve, reject) => {
+        BetModel.find({ rouletteId }).then((bets) => {
+            resolve(bets)
+        })
+    })
 }
 
 
