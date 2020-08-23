@@ -169,6 +169,13 @@ function betValidation(betObject) {
             }
         }
         let number = Number(betObject.betOption)
+        if (number !== parseInt(betObject.betOption)) {
+            
+            return {
+                result: false,
+                message: 'Debe ser un número entero entre 0 y 36'
+            }
+        }
         if (number < 0 || number > 36) {
             
             return {
